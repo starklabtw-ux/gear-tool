@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>齒輪軸承孔工具</title>
+<style>
+  :root {
+    --bg: #fafafa;
+    --panel: #ffffff;
+    --border: #e3e3e3;
+    --text: #222;
+    --muted: #777;
+    --accent: #e63946;
+    --accent-dark: #c1121f;
+    --blue: #1d4ed8;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", "Microsoft JhengHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+  }
+  header {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    background: var(--panel);
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+  header h1 { margin: 0; font-size: 18px; }
+  header .sub { color: var(--muted); font-size: 12px; }
+  main {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 16px;
+    padding: 16px;
+    height: calc(100vh - 52px);
+  }
+  .previews {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    gap: 12px;
+    min-height: 0;
+  }
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+  .panel-title {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .panel-title .badge {
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    background: #eef;
+    color: var(--blue);
+    letter-spacing: 0;
+  }
+  .panel-title .badge.out { background: #fee; color: var(--accent-dark); }
+  .panel-body {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    padding: 8px;
+    min-height: 0;
+  }
+  .panel.drop-on .panel-body {
+    background: #eef6ff;
+    outline: 2px dashed var(--blue);
+    outline-offset: -6px;
+  }
+  .empty-msg {
+    color: var(--muted);
+    text-align: center;
+    white-space: pre;
+    font-size: 13px;
+  }
+  .svg-box {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .svg-box svg {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    display: block;
+  }
+  .panel-body.clickable { cursor: crosshair; }
+  .controls {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    overflow-y: auto;
+  }
+  .section {
+    border-bottom: 1px solid var(--border);
+    padding: 10px 0;
+  }
+  .section:first-child { padding-top: 0; }
+  .section:last-child { border-bottom: none; }
+  .section h2 {
+    margin: 0 0 8px;
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  label { display: block; margin: 6px 0; font-size: 13px; }
+  label.inline { display: inline-flex; align-items: center; gap: 6px; }
+  .row { display: flex; gap: 8px; align-items: flex-end; }
+  .row label { margin: 0; flex: 1; }
+  input[type="number"], input[type="text"], select {
+    width: 100%;
+    padding: 5px 7px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 13px;
+    font-family: inherit;
+  }
+  input[type="color"] {
+    width: 32px;
+    height: 26px;
+    padding: 2px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  input[type="file"] { display: none; }
+  .btn {
+    display: block;
+    width: 100%;
+    padding: 9px;
+    border: 1px solid var(--border);
+    background: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-family: inherit;
+    text-align: center;
+    transition: background 0.15s;
+  }
+  .btn:hover { background: #f3f3f3; }
+  .btn-primary {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+    font-weight: 600;
+  }
+  .btn-primary:hover { background: var(--accent-dark); }
+  .btn-primary:disabled {
+    background: #ccc; border-color: #ccc; cursor: not-allowed;
+  }
+  .hint { color: var(--muted); font-size: 11px; margin-top: 3px; line-height: 1.4; }
+  code {
+    background: #f3f3f3;
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-size: 11px;
+  }
+  footer {
+    grid-column: 1 / -1;
+    color: var(--muted);
+    font-size: 11px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>🦾 齒輪軸承孔工具</h1>
+  <span class="sub">上傳齒輪 SVG → 加軸承孔 &amp; 固定孔 → 下載向量檔(圖層已分好)</span>
+</header>
+<main>
+  <div class="previews">
+    <!-- ORIGINAL -->
+    <div class="panel" id="panelOrig">
+      <div class="panel-title">
+        <span>原始 SVG</span>
+        <span class="badge">Before</span>
+      </div>
+      <div class="panel-body">
+        <div class="svg-box" id="origBox"></div>
+        <div class="empty-msg" id="origEmpty">拖放 SVG 檔到這裡\A或點右側 [選擇檔案]</div>
+      </div>
+    </div>
+    <!-- PROCESSED -->
+    <div class="panel" id="panelOut">
+      <div class="panel-title">
+        <span>加工後</span>
+        <span class="badge out">After</span>
+      </div>
+      <div class="panel-body" id="outBody">
+        <div class="svg-box" id="outBox"></div>
+        <div class="empty-msg" id="outEmpty">載入檔案後會在此顯示加工結果</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <!-- 1. Upload -->
+    <div class="section">
+      <h2>1. 上傳 SVG</h2>
+      <label class="btn" for="fileInput">📁 選擇或拖放檔案</label>
+      <input type="file" id="fileInput" accept=".svg,image/svg+xml" />
+      <div class="hint" id="fileName">尚未選擇檔案</div>
+    </div>
+
+    <!-- 2. Center -->
+    <div class="section">
+      <h2>2. 齒輪中心</h2>
+      <label class="inline">
+        <input type="checkbox" id="autoCenter" checked />
+        自動偵測中心點
+      </label>
+      <div class="hint">取消後,點「加工後」圖上任何位置可手動放置中心</div>
+      <div class="hint" id="centerInfo" style="color:var(--blue);">未載入檔案</div>
+    </div>
+
+    <!-- 3. Saved presets -->
+    <div class="section">
+      <h2>3. 常用規格</h2>
+      <div class="row" style="align-items:stretch;">
+        <select id="presetSelect" style="flex:1;">
+          <option value="">— 選擇已存規格 —</option>
+        </select>
+        <button class="btn icon-btn" id="presetDelete" title="刪除選取規格" style="flex:0 0 auto; width:36px; padding:5px 0;">🗑</button>
+      </div>
+      <button class="btn" id="presetSave" style="margin-top:6px;">💾 存成新的常用規格</button>
+      <div class="hint">存入後下次打開瀏覽器還在。會儲存所有孔參數(中心、固定孔尺寸與間距)</div>
+    </div>
+
+    <!-- 4. Center shaft hole -->
+    <div class="section">
+      <h2>4. 中心孔(軸心)</h2>
+      <label>
+        直徑 (mm)
+        <input type="number" id="centerDia" value="5" step="0.1" min="0.1" />
+      </label>
+      <div class="hint">軸承用內徑(軸心穿過的孔),不是外圈</div>
+    </div>
+
+    <!-- 5. Mounting holes -->
+    <div class="section">
+      <h2>5. 固定孔(螺絲)</h2>
+      <label class="inline">
+        <input type="checkbox" id="mountOn" checked />
+        加入 4 個十字排列孔
+      </label>
+      <div class="row" style="margin-top:6px;">
+        <label>直徑 (mm)<input type="number" id="mountDia" value="3" step="0.1" min="0.1" /></label>
+        <label>距中心 (mm)<input type="number" id="mountOffset" value="5" step="0.1" min="0.1" /></label>
+      </div>
+      <label class="inline" style="margin-top:6px;">
+        <input type="checkbox" id="mount8" />
+        改成 8 孔(十字 + 對角)
+      </label>
+    </div>
+
+    <!-- 6. Label -->
+    <div class="section">
+      <h2>6. 標籤文字</h2>
+      <label class="inline">
+        <input type="checkbox" id="labelOn" checked />
+        加上文字標籤
+      </label>
+      <label class="inline" style="margin-top:4px;">
+        <input type="checkbox" id="labelAuto" checked />
+        從檔名自動抓
+      </label>
+      <label>
+        文字內容
+        <input type="text" id="labelText" value="M130" />
+      </label>
+      <div class="row">
+        <label>顏色<input type="color" id="labelColor" value="#e63946" /></label>
+        <label>大小<input type="number" id="labelSize" value="8" step="0.5" min="1" /></label>
+        <label>上偏移<input type="number" id="labelOffset" value="-14" step="0.5" /></label>
+      </div>
+      <div class="hint">上偏移 = 文字放在中心上方幾 mm(負值=上方)</div>
+    </div>
+
+    <!-- 6. Download -->
+    <div class="section">
+      <button class="btn btn-primary" id="downloadBtn" disabled>📥 下載 SVG</button>
+      <div class="hint" style="text-align:center; margin-top:4px;">
+        圖層:<code>Gear</code> / <code>Bearing Hole</code> / <code>Mounting Holes</code> / <code>Label</code>
+      </div>
+    </div>
+  </div>
+  <footer>完全離線,檔案不會上傳 · 齒輪中心在 AI 開啟後自動分成獨立圖層</footer>
+</main>
+
+<script>
+"use strict";
+const SVG_NS = "http://www.w3.org/2000/svg";
+
+// ========== State ==========
+let originalSvgText = null;
+let originalFileName = null;
+let center = { x: 0, y: 0 };   // gear center in SVG USER coords (viewBox space)
+
+// ========== DOM ==========
+const $ = id => document.getElementById(id);
+const origBox = $("origBox");
+const outBox = $("outBox");
+const origEmpty = $("origEmpty");
+const outEmpty = $("outEmpty");
+const outBody = $("outBody");
+const centerInfo = $("centerInfo");
+const downloadBtn = $("downloadBtn");
+
+// ========== File handling ==========
+$("fileInput").addEventListener("change", e => {
+  const f = e.target.files[0];
+  if (f) loadFile(f);
+});
+
+// Drag & drop on both panels
+["panelOrig", "panelOut"].forEach(pid => {
+  const p = $(pid);
+  ["dragenter", "dragover"].forEach(ev => p.addEventListener(ev, e => {
+    e.preventDefault(); p.classList.add("drop-on");
+  }));
+  ["dragleave", "drop"].forEach(ev => p.addEventListener(ev, e => {
+    e.preventDefault(); p.classList.remove("drop-on");
+  }));
+  p.addEventListener("drop", e => {
+    const f = e.dataTransfer.files[0];
+    if (f && f.name.toLowerCase().endsWith(".svg")) loadFile(f);
+  });
+});
+
+function loadFile(file) {
+  originalFileName = file.name;
+  $("fileName").textContent = file.name;
+  const reader = new FileReader();
+  reader.onload = () => {
+    originalSvgText = reader.result;
+    if ($("labelAuto").checked) autoFillLabel(file.name);
+    renderOriginal();
+    // Need original in DOM for center detection. setTimeout(0) fires reliably
+    // even in background tabs (unlike requestAnimationFrame).
+    setTimeout(() => {
+      if ($("autoCenter").checked) autoDetectCenter();
+      renderProcessed();
+    }, 0);
+  };
+  reader.readAsText(file);
+}
+
+function autoFillLabel(name) {
+  // Extract module/designation from filename.
+  // Priority:
+  //   1. "m" or "M" + optional letters + trailing digits → "M<digits>"
+  //      e.g. "secondgearmi130" → "M130", "gearm2.5" → "M2.5"
+  //   2. "z" or "Z" + digits (tooth count)                → "Z<digits>"
+  //   3. Last letter block + trailing digits              → "<Letter><digits>"
+  //   4. Basename as-is
+  const base = name.replace(/\.svg$/i, "");
+  let m;
+  if ((m = base.match(/[mM][a-zA-Z]*(\d+(?:\.\d+)?)\s*$/))) {
+    $("labelText").value = "M" + m[1];
+  } else if ((m = base.match(/[zZ][a-zA-Z]*(\d+(?:\.\d+)?)\s*$/))) {
+    $("labelText").value = "Z" + m[1];
+  } else if ((m = base.match(/([a-zA-Z])[a-zA-Z]*\s*(\d+(?:\.\d+)?)\s*$/))) {
+    $("labelText").value = m[1].toUpperCase() + m[2];
+  } else {
+    $("labelText").value = base;
+  }
+}
+
+// ========== SVG rendering ==========
+function renderOriginal() {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(originalSvgText, "image/svg+xml");
+  if (doc.querySelector("parsererror")) {
+    alert("SVG 解析失敗,檔案可能損毀");
+    return;
+  }
+  origBox.innerHTML = "";
+  origBox.appendChild(doc.documentElement);
+  origEmpty.style.display = "none";
+}
+
+function buildProcessedDoc() {
+  // Returns a brand new Document with wrapped layers, never mutates original.
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(originalSvgText, "image/svg+xml");
+  const root = doc.documentElement;
+
+  // Wrap existing children in <g id="Gear">
+  // We wrap ALL direct children of root, including <defs> and <desc>,
+  // which is fine for rendering. (They keep working inside a <g>.)
+  const gearLayer = doc.createElementNS(SVG_NS, "g");
+  gearLayer.setAttribute("id", "Gear");
+  while (root.firstChild) gearLayer.appendChild(root.firstChild);
+  root.appendChild(gearLayer);
+
+  // Add holes + label as top-level groups
+  buildHoleLayers(doc).forEach(l => root.appendChild(l));
+  const labelLayer = buildLabelLayer(doc);
+  if (labelLayer) root.appendChild(labelLayer);
+
+  return doc;
+}
+
+function renderProcessed() {
+  if (!originalSvgText) return;
+  const doc = buildProcessedDoc();
+  outBox.innerHTML = "";
+  outBox.appendChild(doc.documentElement);
+  outEmpty.style.display = "none";
+  downloadBtn.disabled = false;
+}
+
+function buildHoleLayers(doc) {
+  const layers = [];
+  const centerDia = parseFloat($("centerDia").value) || 5;
+  const strokeW = getSuggestedStrokeWidth();
+
+  // Bearing Hole (center)
+  const bearing = doc.createElementNS(SVG_NS, "g");
+  bearing.setAttribute("id", "Bearing Hole");
+  bearing.setAttribute("fill", "none");
+  bearing.setAttribute("stroke", "black");
+  bearing.setAttribute("stroke-width", String(strokeW));
+  const c1 = doc.createElementNS(SVG_NS, "circle");
+  c1.setAttribute("cx", center.x.toFixed(4));
+  c1.setAttribute("cy", center.y.toFixed(4));
+  c1.setAttribute("r", (centerDia / 2).toFixed(4));
+  bearing.appendChild(c1);
+  layers.push(bearing);
+
+  // Mounting Holes
+  if ($("mountOn").checked) {
+    const mountDia = parseFloat($("mountDia").value) || 3;
+    const offset = parseFloat($("mountOffset").value) || 5;
+    const mount = doc.createElementNS(SVG_NS, "g");
+    mount.setAttribute("id", "Mounting Holes");
+    mount.setAttribute("fill", "none");
+    mount.setAttribute("stroke", "black");
+    mount.setAttribute("stroke-width", String(strokeW));
+
+    const positions = [[0, -offset], [0, offset], [-offset, 0], [offset, 0]];
+    if ($("mount8").checked) {
+      const s = offset / Math.SQRT2;
+      positions.push([s, -s], [-s, -s], [s, s], [-s, s]);
+    }
+    positions.forEach(([dx, dy]) => {
+      const c = doc.createElementNS(SVG_NS, "circle");
+      c.setAttribute("cx", (center.x + dx).toFixed(4));
+      c.setAttribute("cy", (center.y + dy).toFixed(4));
+      c.setAttribute("r", (mountDia / 2).toFixed(4));
+      mount.appendChild(c);
+    });
+    layers.push(mount);
+  }
+  return layers;
+}
+
+function buildLabelLayer(doc) {
+  if (!$("labelOn").checked) return null;
+  const text = $("labelText").value.trim();
+  if (!text) return null;
+
+  const layer = doc.createElementNS(SVG_NS, "g");
+  layer.setAttribute("id", "Label");
+
+  const t = doc.createElementNS(SVG_NS, "text");
+  const size = parseFloat($("labelSize").value) || 8;
+  const offset = parseFloat($("labelOffset").value) || -14;
+  const color = $("labelColor").value || "#e63946";
+
+  t.setAttribute("x", center.x.toFixed(4));
+  t.setAttribute("y", (center.y + offset).toFixed(4));
+  t.setAttribute("fill", color);
+  t.setAttribute("font-size", String(size));
+  t.setAttribute("font-family", "Arial, Helvetica, sans-serif");
+  t.setAttribute("text-anchor", "middle");
+  t.setAttribute("dominant-baseline", "middle");
+  t.textContent = text;
+  layer.appendChild(t);
+  return layer;
+}
+
+// Suggest stroke width proportional to SVG size
+function getSuggestedStrokeWidth() {
+  const svg = origBox.querySelector("svg");
+  if (!svg) return 0.2;
+  const vb = (svg.getAttribute("viewBox") || "").split(/\s+/).map(parseFloat);
+  if (vb.length === 4) {
+    const maxDim = Math.max(vb[2], vb[3]);
+    return Math.max(0.1, maxDim / 1000); // ~0.3 for a 300mm gear
+  }
+  return 0.2;
+}
+
+// ========== Center detection (SVG USER space) ==========
+function autoDetectCenter() {
+  const svg = origBox.querySelector("svg");
+  if (!svg) return;
+
+  // Strategy: find the smallest circle, return its center in root SVG
+  // user coordinate space by walking up and multiplying transforms manually.
+  const circles = svg.querySelectorAll("circle");
+  let best = null;
+  let bestR = Infinity;
+  circles.forEach(c => {
+    const r = parseFloat(c.getAttribute("r") || "0");
+    // Ignore impossibly tiny circles (< 0.5mm) that are probably markers-of-markers
+    if (r >= 0.5 && r < bestR) { bestR = r; best = c; }
+  });
+
+  if (best) {
+    const cx = parseFloat(best.getAttribute("cx") || "0");
+    const cy = parseFloat(best.getAttribute("cy") || "0");
+    const p = localToUserSpace(best, svg, cx, cy);
+    center.x = p.x;
+    center.y = p.y;
+    centerInfo.textContent = `偵測到中心:r=${bestR.toFixed(2)} @ (${center.x.toFixed(2)}, ${center.y.toFixed(2)})`;
+  } else {
+    const vb = (svg.getAttribute("viewBox") || "0 0 100 100").split(/\s+/).map(parseFloat);
+    center.x = vb[0] + vb[2] / 2;
+    center.y = vb[1] + vb[3] / 2;
+    centerInfo.textContent = `未找到圓,使用 viewBox 中心`;
+  }
+}
+
+// Walk up parent chain from `element` (exclusive) to `rootSvg` (exclusive),
+// multiplying each ancestor's transform. Returns the point in rootSvg's
+// user coordinate system (i.e. what you'd put as cx/cy on a direct child
+// of the rootSvg element).
+function localToUserSpace(element, rootSvg, localX, localY) {
+  let curr = element;
+  // Accumulate matrix = ancestor1.transform * ancestor2.transform * ... (outermost last)
+  // The math: point_in_user = outermost * ... * innermost * point_local
+  // We'll build from outermost down: start with identity, then for each ancestor
+  // from outer to inner, multiply. Easier: walk from inner to outer, at each
+  // step do matrix = transform * matrix.
+  let matrix = rootSvg.createSVGMatrix(); // identity
+
+  // Include the element's OWN transform too (e.g. if the circle itself has transform)
+  curr = element;
+  while (curr && curr !== rootSvg) {
+    const t = curr.transform && curr.transform.baseVal;
+    if (t && t.numberOfItems > 0) {
+      try {
+        const consolidated = t.consolidate();
+        if (consolidated && consolidated.matrix) {
+          // We want to apply ancestor transforms AFTER child transforms,
+          // i.e. new matrix = ancestor.matrix * old matrix
+          matrix = consolidated.matrix.multiply(matrix);
+        }
+      } catch (e) { /* ignore */ }
+    }
+    curr = curr.parentNode;
+  }
+
+  const pt = rootSvg.createSVGPoint();
+  pt.x = localX; pt.y = localY;
+  return pt.matrixTransform(matrix);
+}
+
+// ========== Manual center override ==========
+outBody.addEventListener("click", e => {
+  if ($("autoCenter").checked) return;
+  const svg = outBox.querySelector("svg");
+  if (!svg) return;
+  const pt = svg.createSVGPoint();
+  pt.x = e.clientX; pt.y = e.clientY;
+  const ctm = svg.getScreenCTM();
+  if (!ctm) return;
+  const p = pt.matrixTransform(ctm.inverse());
+  center.x = p.x;
+  center.y = p.y;
+  centerInfo.textContent = `手動設定:(${center.x.toFixed(2)}, ${center.y.toFixed(2)})`;
+  renderProcessed();
+});
+
+$("autoCenter").addEventListener("change", () => {
+  outBody.classList.toggle("clickable", !$("autoCenter").checked);
+  if ($("autoCenter").checked && originalSvgText) {
+    setTimeout(() => { autoDetectCenter(); renderProcessed(); }, 0);
+  }
+});
+
+// ========== Control bindings ==========
+const liveInputs = [
+  "centerDia", "mountDia", "mountOffset", "mountOn", "mount8",
+  "labelOn", "labelText", "labelColor", "labelSize", "labelOffset"
+];
+liveInputs.forEach(id => {
+  const el = $(id);
+  el.addEventListener("input", renderProcessed);
+  el.addEventListener("change", renderProcessed);
+});
+
+// ========== Preset storage (localStorage) ==========
+const PRESET_KEY = "gear-tool-presets-v1";
+
+function loadPresets() {
+  try {
+    return JSON.parse(localStorage.getItem(PRESET_KEY) || "[]");
+  } catch { return []; }
+}
+function savePresets(arr) {
+  localStorage.setItem(PRESET_KEY, JSON.stringify(arr));
+}
+function refreshPresetDropdown() {
+  const sel = $("presetSelect");
+  const presets = loadPresets();
+  const prev = sel.value;
+  sel.innerHTML = '<option value="">— 選擇已存規格 —</option>' +
+    presets.map((p, i) => `<option value="${i}">${escapeHtml(p.name)} · 中心Ø${p.centerDia} / 固定Ø${p.mountDia}@${p.mountOffset}mm</option>`).join("");
+  // Try to restore previous selection
+  if (prev && sel.querySelector(`option[value="${prev}"]`)) sel.value = prev;
+}
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  }[c]));
+}
+
+function currentSettingsSnapshot() {
+  return {
+    centerDia: parseFloat($("centerDia").value) || 5,
+    mountOn: $("mountOn").checked,
+    mountDia: parseFloat($("mountDia").value) || 3,
+    mountOffset: parseFloat($("mountOffset").value) || 5,
+    mount8: $("mount8").checked,
+  };
+}
+function applyPreset(p) {
+  $("centerDia").value = p.centerDia;
+  $("mountOn").checked = !!p.mountOn;
+  $("mountDia").value = p.mountDia;
+  $("mountOffset").value = p.mountOffset;
+  $("mount8").checked = !!p.mount8;
+  renderProcessed();
+}
+
+$("presetSelect").addEventListener("change", e => {
+  const idx = parseInt(e.target.value, 10);
+  const presets = loadPresets();
+  if (!isNaN(idx) && presets[idx]) applyPreset(presets[idx]);
+});
+
+$("presetSave").addEventListener("click", () => {
+  const defaultName = `Ø${$("centerDia").value} / 固定Ø${$("mountDia").value}`;
+  const name = prompt("幫這組規格取個名字(例:「小齒輪 Ø5」):", defaultName);
+  if (!name || !name.trim()) return;
+  const presets = loadPresets();
+  const entry = { name: name.trim(), ...currentSettingsSnapshot() };
+  // If a preset with the same name exists, overwrite it
+  const existing = presets.findIndex(p => p.name === entry.name);
+  if (existing >= 0) {
+    if (!confirm(`已有叫「${entry.name}」的規格,要覆蓋嗎?`)) return;
+    presets[existing] = entry;
+  } else {
+    presets.push(entry);
+  }
+  savePresets(presets);
+  refreshPresetDropdown();
+  // Select the saved one
+  const newIdx = presets.findIndex(p => p.name === entry.name);
+  $("presetSelect").value = String(newIdx);
+});
+
+$("presetDelete").addEventListener("click", () => {
+  const idx = parseInt($("presetSelect").value, 10);
+  const presets = loadPresets();
+  if (isNaN(idx) || !presets[idx]) {
+    alert("先在下拉選單選一個規格再刪除");
+    return;
+  }
+  if (!confirm(`確定刪除「${presets[idx].name}」?`)) return;
+  presets.splice(idx, 1);
+  savePresets(presets);
+  refreshPresetDropdown();
+});
+
+refreshPresetDropdown();
+
+$("labelAuto").addEventListener("change", () => {
+  if ($("labelAuto").checked && originalFileName) {
+    autoFillLabel(originalFileName);
+    renderProcessed();
+  }
+});
+
+// ========== Download ==========
+downloadBtn.addEventListener("click", () => {
+  if (!originalSvgText) return;
+  const doc = buildProcessedDoc();
+  const serializer = new XMLSerializer();
+  let out = serializer.serializeToString(doc);
+  if (!out.startsWith("<?xml")) {
+    out = '<?xml version="1.0" encoding="UTF-8"?>\n' + out;
+  }
+  const blob = new Blob([out], { type: "image/svg+xml" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  const base = (originalFileName || "gear").replace(/\.svg$/i, "");
+  a.href = url;
+  a.download = base + "_drilled.svg";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+});
+</script>
+</body>
+</html>
