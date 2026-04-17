@@ -696,9 +696,35 @@ function renderOriginal() {
     alert("SVG 解析失敗,檔案可能損毀");
     return;
   }
+  const svgEl = doc.documentElement;
   origBox.innerHTML = "";
-  origBox.appendChild(doc.documentElement);
+  origBox.appendChild(svgEl);
+  fitSvgToContent(svgEl);
   origEmpty.style.display = "none";
+}
+
+// Tighten the SVG's viewBox to the bounding box of its actual content.
+// Hessmer's output has a viewBox spanning gear1+gear2 so a single gear
+// only fills ~20% of the area. getBBox() measures the union of all
+// rendered descendants in the root SVG's coordinate space.
+function fitSvgToContent(svg) {
+  if (!svg) return;
+  try {
+    const bbox = svg.getBBox();
+    if (!bbox || !isFinite(bbox.width) || !isFinite(bbox.height)
+        || bbox.width === 0 || bbox.height === 0) return;
+    const pad = Math.max(bbox.width, bbox.height) * 0.05;
+    const x = bbox.x - pad;
+    const y = bbox.y - pad;
+    const w = bbox.width + pad * 2;
+    const h = bbox.height + pad * 2;
+    svg.setAttribute("viewBox", `${x.toFixed(4)} ${y.toFixed(4)} ${w.toFixed(4)} ${h.toFixed(4)}`);
+    // Update physical dimensions so Illustrator still sees mm-based size
+    svg.setAttribute("width", `${w.toFixed(4)}mm`);
+    svg.setAttribute("height", `${h.toFixed(4)}mm`);
+  } catch (e) {
+    console.warn("fitSvgToContent failed:", e);
+  }
 }
 
 function buildProcessedDoc() {
@@ -722,8 +748,10 @@ function buildProcessedDoc() {
 function renderProcessed() {
   if (!originalSvgText) return;
   const doc = buildProcessedDoc();
+  const svgEl = doc.documentElement;
   outBox.innerHTML = "";
-  outBox.appendChild(doc.documentElement);
+  outBox.appendChild(svgEl);
+  fitSvgToContent(svgEl);
   outEmpty.style.display = "none";
   downloadBtn.disabled = false;
 }
@@ -1009,10 +1037,12 @@ $("genGearBtn").addEventListener("click", () => {
 
 // ========== Download ==========
 downloadBtn.addEventListener("click", () => {
-  if (!originalSvgText) return;
-  const doc = buildProcessedDoc();
+  const svg = outBox.querySelector("svg");
+  if (!svg) return;
+  // Serialize the currently-rendered (viewBox-tightened) SVG directly
+  // so the downloaded file matches exactly what the user sees.
   const serializer = new XMLSerializer();
-  let out = serializer.serializeToString(doc);
+  let out = serializer.serializeToString(svg);
   if (!out.startsWith("<?xml")) {
     out = '<?xml version="1.0" encoding="UTF-8"?>\n' + out;
   }
