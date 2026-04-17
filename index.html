@@ -6,40 +6,63 @@
 <title>齒輪軸承孔工具</title>
 <style>
   :root {
-    --bg: #fafafa;
+    --bg: #f5f5f7;
     --panel: #ffffff;
-    --border: #e3e3e3;
-    --text: #222;
-    --muted: #777;
+    --border: #e5e5ea;
+    --border-strong: #d1d1d6;
+    --text: #1d1d1f;
+    --muted: #86868b;
+    --muted-2: #6e6e73;
     --accent: #e63946;
     --accent-dark: #c1121f;
-    --blue: #1d4ed8;
+    --accent-soft: #fdeef0;
+    --blue: #0071e3;
+    --success: #34c759;
+    --group-bg: #fafafa;
   }
   * { box-sizing: border-box; }
+  html, body { height: 100%; }
   body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", "Microsoft JhengHei", sans-serif;
     background: var(--bg);
     color: var(--text);
     font-size: 14px;
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
   }
+
+  /* ===== Header ===== */
   header {
-    padding: 14px 20px;
+    padding: 12px 24px;
     border-bottom: 1px solid var(--border);
     background: var(--panel);
     display: flex;
-    align-items: baseline;
-    gap: 12px;
+    align-items: center;
+    gap: 14px;
   }
-  header h1 { margin: 0; font-size: 18px; }
-  header .sub { color: var(--muted); font-size: 12px; }
+  header h1 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  header .sub {
+    color: var(--muted);
+    font-size: 12px;
+    flex: 1;
+  }
+
+  /* ===== Main layout ===== */
   main {
     display: grid;
-    grid-template-columns: 1fr 340px;
+    grid-template-columns: 1fr 360px;
     gap: 16px;
     padding: 16px;
-    height: calc(100vh - 52px);
+    height: calc(100vh - 49px);
   }
+
+  /* ===== Preview panels ===== */
   .previews {
     display: grid;
     grid-template-rows: 1fr 1fr;
@@ -49,7 +72,7 @@
   .panel {
     background: var(--panel);
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: 10px;
     position: relative;
     overflow: hidden;
     display: flex;
@@ -57,26 +80,30 @@
     min-height: 0;
   }
   .panel-title {
-    padding: 8px 12px;
+    padding: 10px 14px;
     border-bottom: 1px solid var(--border);
-    font-size: 12px;
-    color: var(--muted);
+    font-size: 13px;
+    color: var(--text);
     font-weight: 600;
-    letter-spacing: 0.05em;
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-shrink: 0;
+    background: var(--group-bg);
   }
   .panel-title .badge {
     font-size: 10px;
-    padding: 2px 6px;
-    border-radius: 3px;
-    background: #eef;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: #e1f0ff;
     color: var(--blue);
-    letter-spacing: 0;
+    font-weight: 500;
+    letter-spacing: 0.02em;
   }
-  .panel-title .badge.out { background: #fee; color: var(--accent-dark); }
+  .panel-title .badge.out {
+    background: var(--accent-soft);
+    color: var(--accent-dark);
+  }
   .panel-body {
     flex: 1;
     display: flex;
@@ -84,19 +111,21 @@
     justify-content: center;
     position: relative;
     overflow: hidden;
-    padding: 8px;
+    padding: 12px;
     min-height: 0;
+    background: repeating-linear-gradient(45deg, #fff 0 10px, #fafafa 10px 20px);
   }
   .panel.drop-on .panel-body {
     background: #eef6ff;
     outline: 2px dashed var(--blue);
-    outline-offset: -6px;
+    outline-offset: -8px;
   }
   .empty-msg {
     color: var(--muted);
     text-align: center;
     white-space: pre;
     font-size: 13px;
+    line-height: 1.6;
   }
   .svg-box {
     width: 100%;
@@ -113,106 +142,303 @@
     display: block;
   }
   .panel-body.clickable { cursor: crosshair; }
+
+  /* ===== Controls column ===== */
   .controls {
     background: var(--panel);
     border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 14px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+  .controls-scroll {
+    flex: 1;
     overflow-y: auto;
+    padding: 16px;
   }
-  .section {
-    border-bottom: 1px solid var(--border);
-    padding: 10px 0;
+  .controls-footer {
+    border-top: 1px solid var(--border);
+    padding: 12px 16px;
+    background: var(--group-bg);
+    border-radius: 0 0 10px 10px;
   }
-  .section:first-child { padding-top: 0; }
-  .section:last-child { border-bottom: none; }
-  .section h2 {
-    margin: 0 0 8px;
-    font-size: 12px;
-    color: var(--muted);
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
+
+  /* ===== Tabs (input source) ===== */
+  .tabs {
+    display: flex;
+    background: var(--group-bg);
+    border-radius: 8px;
+    padding: 3px;
+    margin-bottom: 14px;
+    gap: 3px;
   }
-  label { display: block; margin: 6px 0; font-size: 13px; }
-  label.inline { display: inline-flex; align-items: center; gap: 6px; }
-  .row { display: flex; gap: 8px; align-items: flex-end; }
-  .row label { margin: 0; flex: 1; }
-  input[type="number"], input[type="text"], select {
-    width: 100%;
-    padding: 5px 7px;
-    border: 1px solid var(--border);
-    border-radius: 4px;
+  .tab {
+    flex: 1;
+    padding: 7px 10px;
+    border: none;
+    background: transparent;
+    border-radius: 6px;
     font-size: 13px;
     font-family: inherit;
+    color: var(--muted-2);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-weight: 500;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active {
+    background: var(--panel);
+    color: var(--text);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05), 0 0 0 0.5px rgba(0,0,0,0.04);
+  }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ===== Group (section card) ===== */
+  .group {
+    background: var(--group-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-top: 12px;
+  }
+  .group > h2 {
+    margin: 0 0 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .group > h2 .group-hint {
+    font-weight: 400;
+    color: var(--muted);
+    font-size: 11px;
+    margin-left: auto;
+  }
+
+  /* details/summary styling */
+  details.group > summary {
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    list-style: none;
+    user-select: none;
+  }
+  details.group > summary::-webkit-details-marker { display: none; }
+  details.group > summary::after {
+    content: "▸";
+    margin-left: auto;
+    color: var(--muted);
+    transition: transform 0.15s;
+    font-size: 11px;
+  }
+  details.group[open] > summary::after { transform: rotate(90deg); }
+  details.group[open] > summary { margin-bottom: 10px; }
+
+  /* Subsection inside group (for holes) */
+  .sub {
+    padding-top: 10px;
+    margin-top: 10px;
+    border-top: 1px dashed var(--border-strong);
+  }
+  .sub:first-of-type { border-top: none; padding-top: 0; margin-top: 0; }
+  .sub-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted-2);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* ===== Forms ===== */
+  label {
+    display: block;
+    font-size: 12px;
+    color: var(--muted-2);
+    margin-bottom: 4px;
+  }
+  label.inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--text);
+    margin: 0;
+    cursor: pointer;
+  }
+  label.inline input[type="checkbox"] { cursor: pointer; }
+  .field { margin-bottom: 10px; }
+  .field:last-child { margin-bottom: 0; }
+  .row {
+    display: grid;
+    gap: 8px;
+  }
+  .row.cols-2 { grid-template-columns: 1fr 1fr; }
+  .row.cols-3 { grid-template-columns: auto 1fr 1fr; align-items: end; }
+  input[type="number"], input[type="text"], select {
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid var(--border-strong);
+    border-radius: 6px;
+    font-size: 13px;
+    font-family: inherit;
+    background: white;
+    color: var(--text);
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  input[type="number"]:focus, input[type="text"]:focus, select:focus {
+    outline: none;
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(0,113,227,0.15);
   }
   input[type="color"] {
-    width: 32px;
-    height: 26px;
+    width: 36px;
+    height: 30px;
     padding: 2px;
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  input[type="file"] { display: none; }
-  .btn {
-    display: block;
-    width: 100%;
-    padding: 9px;
-    border: 1px solid var(--border);
-    background: white;
+    border: 1px solid var(--border-strong);
     border-radius: 6px;
     cursor: pointer;
-    font-size: 14px;
-    font-family: inherit;
-    text-align: center;
-    transition: background 0.15s;
+    background: white;
   }
-  .btn:hover { background: #f3f3f3; }
+  input[type="file"] { display: none; }
+
+  /* ===== Buttons ===== */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid var(--border-strong);
+    background: white;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 13px;
+    font-family: inherit;
+    font-weight: 500;
+    color: var(--text);
+    text-align: center;
+    transition: all 0.15s;
+    box-sizing: border-box;
+  }
+  .btn:hover:not(:disabled) {
+    background: #f5f5f7;
+    border-color: var(--muted);
+  }
+  .btn-ghost {
+    padding: 6px 10px;
+    font-size: 12px;
+    background: transparent;
+    border-color: var(--border);
+  }
+  .btn-icon {
+    width: 32px;
+    flex: 0 0 32px;
+    padding: 6px;
+    font-size: 14px;
+  }
   .btn-primary {
     background: var(--accent);
     color: white;
     border-color: var(--accent);
+    padding: 12px;
+    font-size: 14px;
     font-weight: 600;
   }
-  .btn-primary:hover { background: var(--accent-dark); }
+  .btn-primary:hover:not(:disabled) {
+    background: var(--accent-dark);
+    border-color: var(--accent-dark);
+  }
   .btn-primary:disabled {
-    background: #ccc; border-color: #ccc; cursor: not-allowed;
+    background: #d8d8dc;
+    border-color: #d8d8dc;
+    color: #ffffff;
+    cursor: not-allowed;
   }
-  .hint { color: var(--muted); font-size: 11px; margin-top: 3px; line-height: 1.4; }
-  code {
-    background: #f3f3f3;
-    padding: 1px 4px;
-    border-radius: 3px;
-    font-size: 11px;
+
+  /* ===== Preset row ===== */
+  .preset-row {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 10px;
   }
-  footer {
-    grid-column: 1 / -1;
+  .preset-row select { flex: 1; }
+
+  /* ===== Hints ===== */
+  .hint {
     color: var(--muted);
     font-size: 11px;
-    text-align: center;
+    line-height: 1.5;
+    margin: 4px 0 0;
   }
+  .hint.status {
+    color: var(--blue);
+    font-weight: 500;
+  }
+
+  code {
+    background: #eef;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 11px;
+    color: var(--muted-2);
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  /* ===== File name tag ===== */
+  .file-tag {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: white;
+    border: 1px solid var(--border-strong);
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    color: var(--text);
+    margin-top: 8px;
+  }
+  .file-tag.empty { color: var(--muted); border-style: dashed; }
+
+  /* ===== Layer chips in footer ===== */
+  .layer-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    justify-content: center;
+    margin-top: 8px;
+  }
+  .layer-chips code { font-size: 10px; }
 </style>
 </head>
 <body>
 <header>
   <h1>🦾 齒輪軸承孔工具</h1>
-  <span class="sub">上傳齒輪 SVG → 加軸承孔 &amp; 固定孔 → 下載向量檔(圖層已分好)</span>
+  <span class="sub">產生齒輪 · 加孔 · 下載分好圖層的 SVG</span>
 </header>
 <main>
+  <!-- ===== LEFT: Previews ===== -->
   <div class="previews">
-    <!-- ORIGINAL -->
     <div class="panel" id="panelOrig">
       <div class="panel-title">
-        <span>原始 SVG</span>
+        <span>原始</span>
         <span class="badge">Before</span>
       </div>
       <div class="panel-body">
         <div class="svg-box" id="origBox"></div>
-        <div class="empty-msg" id="origEmpty">拖放 SVG 檔到這裡\A或點右側 [選擇檔案]</div>
+        <div class="empty-msg" id="origEmpty">拖放 SVG 到任一預覽區\A或使用右側「上傳既有」</div>
       </div>
     </div>
-    <!-- PROCESSED -->
     <div class="panel" id="panelOut">
       <div class="panel-title">
         <span>加工後</span>
@@ -220,123 +446,163 @@
       </div>
       <div class="panel-body" id="outBody">
         <div class="svg-box" id="outBox"></div>
-        <div class="empty-msg" id="outEmpty">載入檔案後會在此顯示加工結果</div>
+        <div class="empty-msg" id="outEmpty">載入檔案後顯示加工結果</div>
       </div>
     </div>
   </div>
 
+  <!-- ===== RIGHT: Controls ===== -->
   <div class="controls">
-    <!-- 0. Gear generator shortcut (optional) -->
-    <div class="section">
-      <h2>📐 產生齒輪初稿(Hessmer)</h2>
-      <div class="row">
-        <label>模數 M<input type="number" id="gmModule" value="1.5" step="0.1" min="0.1" /></label>
-        <label>齒數 Z<input type="number" id="gmTeeth" value="30" step="1" min="4" /></label>
+    <div class="controls-scroll">
+
+      <!-- TABS: input source -->
+      <div class="tabs" role="tablist">
+        <button class="tab active" data-tab="gen" type="button">⚙️ Hessmer 產生</button>
+        <button class="tab" data-tab="upload" type="button">📁 上傳既有</button>
       </div>
-      <div class="row">
-        <label>壓力角<input type="number" id="gmAngle" value="20" step="0.5" /></label>
-        <label>中心孔 Ø<input type="number" id="gmHole" value="6" step="0.1" min="0.1" /></label>
+
+      <!-- TAB: Generate -->
+      <div class="tab-panel active" id="tab-gen">
+        <div class="row cols-2">
+          <div class="field">
+            <label for="gmModule">模數 M</label>
+            <input type="number" id="gmModule" value="1.5" step="0.1" min="0.1" />
+          </div>
+          <div class="field">
+            <label for="gmTeeth">齒數 Z</label>
+            <input type="number" id="gmTeeth" value="30" step="1" min="4" />
+          </div>
+        </div>
+        <div class="row cols-2">
+          <div class="field">
+            <label for="gmAngle">壓力角</label>
+            <input type="number" id="gmAngle" value="20" step="0.5" />
+          </div>
+          <div class="field">
+            <label for="gmHole">中心孔 Ø</label>
+            <input type="number" id="gmHole" value="6" step="0.1" min="0.1" />
+          </div>
+        </div>
+        <button class="btn" id="genGearBtn" type="button">🔗 在 Hessmer 開新分頁</button>
+        <p class="hint">產生後按網頁的 <code>Export SVG</code> 下載,再拖回任一預覽區</p>
       </div>
-      <button class="btn" id="genGearBtn" style="margin-top:6px;">🔗 在 Hessmer 開啟(填好參數)</button>
-      <div class="hint">開啟後按 Hessmer 網頁的「Export SVG」下載,檔案會在 Downloads 資料夾。再拖回下方步驟 1 加工</div>
-    </div>
 
-    <!-- 1. Upload -->
-    <div class="section">
-      <h2>1. 上傳 SVG</h2>
-      <label class="btn" for="fileInput">📁 選擇或拖放檔案</label>
-      <input type="file" id="fileInput" accept=".svg,image/svg+xml" />
-      <div class="hint" id="fileName">尚未選擇檔案</div>
-    </div>
-
-    <!-- 2. Center & cleanup -->
-    <div class="section">
-      <h2>2. 齒輪中心 & 清理</h2>
-      <label class="inline">
-        <input type="checkbox" id="autoCenter" checked />
-        自動偵測中心點
-      </label>
-      <div class="hint">取消後,點「加工後」圖上任何位置可手動放置中心</div>
-      <div class="hint" id="centerInfo" style="color:var(--blue);">未載入檔案</div>
-      <label class="inline" style="margin-top:8px;">
-        <input type="checkbox" id="stripRefs" checked />
-        去除藍色參考線(齒頂圓 / 齒根圓)
-      </label>
-      <div class="hint">齒輪網站產出的 SVG 常附帶藍色的參考圓,通常不需要</div>
-    </div>
-
-    <!-- 3. Saved presets -->
-    <div class="section">
-      <h2>3. 常用規格</h2>
-      <div class="row" style="align-items:stretch;">
-        <select id="presetSelect" style="flex:1;">
-          <option value="">— 選擇已存規格 —</option>
-        </select>
-        <button class="btn icon-btn" id="presetDelete" title="刪除選取規格" style="flex:0 0 auto; width:36px; padding:5px 0;">🗑</button>
+      <!-- TAB: Upload -->
+      <div class="tab-panel" id="tab-upload">
+        <label class="btn" for="fileInput">📁 選擇 SVG 檔案</label>
+        <input type="file" id="fileInput" accept=".svg,image/svg+xml" />
+        <div class="file-tag empty" id="fileName">尚未選擇檔案</div>
+        <p class="hint">也可以直接把 SVG 拖到左邊任一預覽區</p>
       </div>
-      <button class="btn" id="presetSave" style="margin-top:6px;">💾 存成新的常用規格</button>
-      <div class="hint">存入後下次打開瀏覽器還在。會儲存所有孔參數(中心、固定孔尺寸與間距)</div>
+
+      <!-- ===== GROUP: Holes ===== -->
+      <section class="group">
+        <h2>🔩 孔設定</h2>
+
+        <!-- Preset management inline -->
+        <div class="preset-row">
+          <select id="presetSelect" title="載入已存規格">
+            <option value="">— 選擇已存規格 —</option>
+          </select>
+          <button class="btn btn-icon" id="presetSave" type="button" title="存成新的常用規格">💾</button>
+          <button class="btn btn-icon" id="presetDelete" type="button" title="刪除選取規格">🗑</button>
+        </div>
+
+        <!-- Center hole -->
+        <div class="sub">
+          <div class="sub-title">⚫ 中心孔(軸心)</div>
+          <div class="field">
+            <label for="centerDia">直徑 Ø (mm)</label>
+            <input type="number" id="centerDia" value="5" step="0.1" min="0.1" />
+          </div>
+        </div>
+
+        <!-- Mount holes -->
+        <div class="sub">
+          <div class="sub-title">
+            <label class="inline">
+              <input type="checkbox" id="mountOn" checked />
+              ⊕ 固定孔(十字 4 孔)
+            </label>
+          </div>
+          <div class="row cols-2">
+            <div class="field">
+              <label for="mountDia">直徑 Ø (mm)</label>
+              <input type="number" id="mountDia" value="3" step="0.1" min="0.1" />
+            </div>
+            <div class="field">
+              <label for="mountOffset">距中心 (mm)</label>
+              <input type="number" id="mountOffset" value="5" step="0.1" min="0.1" />
+            </div>
+          </div>
+          <label class="inline" style="margin-top:4px;">
+            <input type="checkbox" id="mount8" />
+            改成 8 孔(加對角)
+          </label>
+        </div>
+      </section>
+
+      <!-- ===== GROUP: Label ===== -->
+      <section class="group">
+        <h2>🏷️ 標籤
+          <label class="inline group-hint">
+            <input type="checkbox" id="labelOn" checked /> 啟用
+          </label>
+        </h2>
+        <div class="field">
+          <label for="labelText">文字內容</label>
+          <input type="text" id="labelText" value="M130" />
+        </div>
+        <label class="inline" style="margin-bottom:10px;">
+          <input type="checkbox" id="labelAuto" checked />
+          從檔名自動抓(如 <code>...mi130</code> → <code>M130</code>)
+        </label>
+        <div class="row cols-3">
+          <div class="field">
+            <label>顏色</label>
+            <input type="color" id="labelColor" value="#e63946" />
+          </div>
+          <div class="field">
+            <label for="labelSize">字大小</label>
+            <input type="number" id="labelSize" value="8" step="0.5" min="1" />
+          </div>
+          <div class="field">
+            <label for="labelOffset">上偏移 (mm)</label>
+            <input type="number" id="labelOffset" value="-14" step="0.5" />
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== GROUP: Advanced (collapsible) ===== -->
+      <details class="group">
+        <summary>⚙️ 進階</summary>
+        <label class="inline" style="margin-bottom:4px;">
+          <input type="checkbox" id="autoCenter" checked />
+          自動偵測齒輪中心
+        </label>
+        <p class="hint">取消後,點「加工後」預覽圖可手動放置中心</p>
+        <p class="hint status" id="centerInfo">未載入檔案</p>
+
+        <label class="inline" style="margin-top:10px;">
+          <input type="checkbox" id="stripRefs" checked />
+          去除藍色參考線(齒頂圓 / 齒根圓)
+        </label>
+        <p class="hint">Hessmer 等齒輪網站產出的 SVG 常附帶參考圓</p>
+      </details>
+
     </div>
 
-    <!-- 4. Center shaft hole -->
-    <div class="section">
-      <h2>4. 中心孔(軸心)</h2>
-      <label>
-        直徑 (mm)
-        <input type="number" id="centerDia" value="5" step="0.1" min="0.1" />
-      </label>
-      <div class="hint">軸承用內徑(軸心穿過的孔),不是外圈</div>
-    </div>
-
-    <!-- 5. Mounting holes -->
-    <div class="section">
-      <h2>5. 固定孔(螺絲)</h2>
-      <label class="inline">
-        <input type="checkbox" id="mountOn" checked />
-        加入 4 個十字排列孔
-      </label>
-      <div class="row" style="margin-top:6px;">
-        <label>直徑 (mm)<input type="number" id="mountDia" value="3" step="0.1" min="0.1" /></label>
-        <label>距中心 (mm)<input type="number" id="mountOffset" value="5" step="0.1" min="0.1" /></label>
-      </div>
-      <label class="inline" style="margin-top:6px;">
-        <input type="checkbox" id="mount8" />
-        改成 8 孔(十字 + 對角)
-      </label>
-    </div>
-
-    <!-- 6. Label -->
-    <div class="section">
-      <h2>6. 標籤文字</h2>
-      <label class="inline">
-        <input type="checkbox" id="labelOn" checked />
-        加上文字標籤
-      </label>
-      <label class="inline" style="margin-top:4px;">
-        <input type="checkbox" id="labelAuto" checked />
-        從檔名自動抓
-      </label>
-      <label>
-        文字內容
-        <input type="text" id="labelText" value="M130" />
-      </label>
-      <div class="row">
-        <label>顏色<input type="color" id="labelColor" value="#e63946" /></label>
-        <label>大小<input type="number" id="labelSize" value="8" step="0.5" min="1" /></label>
-        <label>上偏移<input type="number" id="labelOffset" value="-14" step="0.5" /></label>
-      </div>
-      <div class="hint">上偏移 = 文字放在中心上方幾 mm(負值=上方)</div>
-    </div>
-
-    <!-- 6. Download -->
-    <div class="section">
-      <button class="btn btn-primary" id="downloadBtn" disabled>📥 下載 SVG</button>
-      <div class="hint" style="text-align:center; margin-top:4px;">
-        圖層:<code>Gear</code> / <code>Bearing Hole</code> / <code>Mounting Holes</code> / <code>Label</code>
+    <!-- ===== Fixed footer: download ===== -->
+    <div class="controls-footer">
+      <button class="btn btn-primary" id="downloadBtn" disabled type="button">📥 下載加工 SVG</button>
+      <div class="layer-chips">
+        <code>Gear</code>
+        <code>Bearing Hole</code>
+        <code>Mounting Holes</code>
+        <code>Label</code>
       </div>
     </div>
   </div>
-  <footer>完全離線,檔案不會上傳 · 齒輪中心在 AI 開啟後自動分成獨立圖層</footer>
 </main>
 
 <script>
@@ -346,7 +612,7 @@ const SVG_NS = "http://www.w3.org/2000/svg";
 // ========== State ==========
 let originalSvgText = null;
 let originalFileName = null;
-let center = { x: 0, y: 0 };   // gear center in SVG USER coords (viewBox space)
+let center = { x: 0, y: 0 };
 
 // ========== DOM ==========
 const $ = id => document.getElementById(id);
@@ -357,6 +623,17 @@ const outEmpty = $("outEmpty");
 const outBody = $("outBody");
 const centerInfo = $("centerInfo");
 const downloadBtn = $("downloadBtn");
+
+// ========== Tabs ==========
+document.querySelectorAll(".tab").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const name = btn.dataset.tab;
+    document.querySelectorAll(".tab").forEach(b => b.classList.toggle("active", b === btn));
+    document.querySelectorAll(".tab-panel").forEach(p => {
+      p.classList.toggle("active", p.id === "tab-" + name);
+    });
+  });
+});
 
 // ========== File handling ==========
 $("fileInput").addEventListener("change", e => {
@@ -381,14 +658,14 @@ $("fileInput").addEventListener("change", e => {
 
 function loadFile(file) {
   originalFileName = file.name;
-  $("fileName").textContent = file.name;
+  const tag = $("fileName");
+  tag.textContent = "📎 " + file.name;
+  tag.classList.remove("empty");
   const reader = new FileReader();
   reader.onload = () => {
     originalSvgText = reader.result;
     if ($("labelAuto").checked) autoFillLabel(file.name);
     renderOriginal();
-    // Need original in DOM for center detection. setTimeout(0) fires reliably
-    // even in background tabs (unlike requestAnimationFrame).
     setTimeout(() => {
       if ($("autoCenter").checked) autoDetectCenter();
       renderProcessed();
@@ -398,13 +675,6 @@ function loadFile(file) {
 }
 
 function autoFillLabel(name) {
-  // Extract module/designation from filename.
-  // Priority:
-  //   1. "m" or "M" + optional letters + trailing digits → "M<digits>"
-  //      e.g. "secondgearmi130" → "M130", "gearm2.5" → "M2.5"
-  //   2. "z" or "Z" + digits (tooth count)                → "Z<digits>"
-  //   3. Last letter block + trailing digits              → "<Letter><digits>"
-  //   4. Basename as-is
   const base = name.replace(/\.svg$/i, "");
   let m;
   if ((m = base.match(/[mM][a-zA-Z]*(\d+(?:\.\d+)?)\s*$/))) {
@@ -432,28 +702,20 @@ function renderOriginal() {
 }
 
 function buildProcessedDoc() {
-  // Returns a brand new Document with wrapped layers, never mutates original.
   const parser = new DOMParser();
   const doc = parser.parseFromString(originalSvgText, "image/svg+xml");
   const root = doc.documentElement;
 
-  // Optional cleanup: remove blue reference circles (pitch / addendum / root
-  // circles) that svg.js-based gear generators include as construction guides.
   if ($("stripRefs").checked) stripReferenceLines(root);
 
-  // Wrap existing children in <g id="Gear">
-  // We wrap ALL direct children of root, including <defs> and <desc>,
-  // which is fine for rendering. (They keep working inside a <g>.)
   const gearLayer = doc.createElementNS(SVG_NS, "g");
   gearLayer.setAttribute("id", "Gear");
   while (root.firstChild) gearLayer.appendChild(root.firstChild);
   root.appendChild(gearLayer);
 
-  // Add holes + label as top-level groups
   buildHoleLayers(doc).forEach(l => root.appendChild(l));
   const labelLayer = buildLabelLayer(doc);
   if (labelLayer) root.appendChild(labelLayer);
-
   return doc;
 }
 
@@ -471,7 +733,6 @@ function buildHoleLayers(doc) {
   const centerDia = parseFloat($("centerDia").value) || 5;
   const strokeW = getSuggestedStrokeWidth();
 
-  // Bearing Hole (center)
   const bearing = doc.createElementNS(SVG_NS, "g");
   bearing.setAttribute("id", "Bearing Hole");
   bearing.setAttribute("fill", "none");
@@ -484,7 +745,6 @@ function buildHoleLayers(doc) {
   bearing.appendChild(c1);
   layers.push(bearing);
 
-  // Mounting Holes
   if ($("mountOn").checked) {
     const mountDia = parseFloat($("mountDia").value) || 3;
     const offset = parseFloat($("mountOffset").value) || 5;
@@ -536,55 +796,36 @@ function buildLabelLayer(doc) {
   return layer;
 }
 
-// Remove elements with stroke="blue" (construction/reference geometry).
-// Only inspects attribute-based stroke — inline style="stroke:blue" also handled.
 function stripReferenceLines(svgRoot) {
-  const removed = [];
-  // Attribute-based stroke="blue"
-  svgRoot.querySelectorAll('[stroke="blue"]').forEach(el => {
-    el.remove();
-    removed.push(el);
-  });
-  // style="stroke: blue" inline style variant
+  svgRoot.querySelectorAll('[stroke="blue"]').forEach(el => el.remove());
   svgRoot.querySelectorAll('[style]').forEach(el => {
     const s = (el.getAttribute("style") || "").replace(/\s+/g, "");
-    if (/stroke:blue/i.test(s) || /stroke:#00f/i.test(s) || /stroke:#0000ff/i.test(s)) {
-      el.remove();
-      removed.push(el);
-    }
+    if (/stroke:blue/i.test(s) || /stroke:#00f/i.test(s) || /stroke:#0000ff/i.test(s)) el.remove();
   });
-  return removed.length;
 }
 
-// Add liveInputs binding
-// Suggest stroke width proportional to SVG size
 function getSuggestedStrokeWidth() {
   const svg = origBox.querySelector("svg");
   if (!svg) return 0.2;
   const vb = (svg.getAttribute("viewBox") || "").split(/\s+/).map(parseFloat);
   if (vb.length === 4) {
     const maxDim = Math.max(vb[2], vb[3]);
-    return Math.max(0.1, maxDim / 1000); // ~0.3 for a 300mm gear
+    return Math.max(0.1, maxDim / 1000);
   }
   return 0.2;
 }
 
-// ========== Center detection (SVG USER space) ==========
+// ========== Center detection ==========
 function autoDetectCenter() {
   const svg = origBox.querySelector("svg");
   if (!svg) return;
-
-  // Strategy: find the smallest circle, return its center in root SVG
-  // user coordinate space by walking up and multiplying transforms manually.
   const circles = svg.querySelectorAll("circle");
   let best = null;
   let bestR = Infinity;
   circles.forEach(c => {
     const r = parseFloat(c.getAttribute("r") || "0");
-    // Ignore impossibly tiny circles (< 0.5mm) that are probably markers-of-markers
     if (r >= 0.5 && r < bestR) { bestR = r; best = c; }
   });
-
   if (best) {
     const cx = parseFloat(best.getAttribute("cx") || "0");
     const cy = parseFloat(best.getAttribute("cy") || "0");
@@ -600,36 +841,21 @@ function autoDetectCenter() {
   }
 }
 
-// Walk up parent chain from `element` (exclusive) to `rootSvg` (exclusive),
-// multiplying each ancestor's transform. Returns the point in rootSvg's
-// user coordinate system (i.e. what you'd put as cx/cy on a direct child
-// of the rootSvg element).
 function localToUserSpace(element, rootSvg, localX, localY) {
+  let matrix = rootSvg.createSVGMatrix();
   let curr = element;
-  // Accumulate matrix = ancestor1.transform * ancestor2.transform * ... (outermost last)
-  // The math: point_in_user = outermost * ... * innermost * point_local
-  // We'll build from outermost down: start with identity, then for each ancestor
-  // from outer to inner, multiply. Easier: walk from inner to outer, at each
-  // step do matrix = transform * matrix.
-  let matrix = rootSvg.createSVGMatrix(); // identity
-
-  // Include the element's OWN transform too (e.g. if the circle itself has transform)
-  curr = element;
   while (curr && curr !== rootSvg) {
     const t = curr.transform && curr.transform.baseVal;
     if (t && t.numberOfItems > 0) {
       try {
         const consolidated = t.consolidate();
         if (consolidated && consolidated.matrix) {
-          // We want to apply ancestor transforms AFTER child transforms,
-          // i.e. new matrix = ancestor.matrix * old matrix
           matrix = consolidated.matrix.multiply(matrix);
         }
       } catch (e) { /* ignore */ }
     }
     curr = curr.parentNode;
   }
-
   const pt = rootSvg.createSVGPoint();
   pt.x = localX; pt.y = localY;
   return pt.matrixTransform(matrix);
@@ -658,7 +884,7 @@ $("autoCenter").addEventListener("change", () => {
   }
 });
 
-// ========== Control bindings ==========
+// ========== Live controls ==========
 const liveInputs = [
   "centerDia", "mountDia", "mountOffset", "mountOn", "mount8",
   "labelOn", "labelText", "labelColor", "labelSize", "labelOffset",
@@ -670,13 +896,12 @@ liveInputs.forEach(id => {
   el.addEventListener("change", renderProcessed);
 });
 
-// ========== Preset storage (localStorage) ==========
+// ========== Preset storage ==========
 const PRESET_KEY = "gear-tool-presets-v1";
 
 function loadPresets() {
-  try {
-    return JSON.parse(localStorage.getItem(PRESET_KEY) || "[]");
-  } catch { return []; }
+  try { return JSON.parse(localStorage.getItem(PRESET_KEY) || "[]"); }
+  catch { return []; }
 }
 function savePresets(arr) {
   localStorage.setItem(PRESET_KEY, JSON.stringify(arr));
@@ -687,7 +912,6 @@ function refreshPresetDropdown() {
   const prev = sel.value;
   sel.innerHTML = '<option value="">— 選擇已存規格 —</option>' +
     presets.map((p, i) => `<option value="${i}">${escapeHtml(p.name)} · 中心Ø${p.centerDia} / 固定Ø${p.mountDia}@${p.mountOffset}mm</option>`).join("");
-  // Try to restore previous selection
   if (prev && sel.querySelector(`option[value="${prev}"]`)) sel.value = prev;
 }
 function escapeHtml(s) {
@@ -695,7 +919,6 @@ function escapeHtml(s) {
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
   }[c]));
 }
-
 function currentSettingsSnapshot() {
   return {
     centerDia: parseFloat($("centerDia").value) || 5,
@@ -726,7 +949,6 @@ $("presetSave").addEventListener("click", () => {
   if (!name || !name.trim()) return;
   const presets = loadPresets();
   const entry = { name: name.trim(), ...currentSettingsSnapshot() };
-  // If a preset with the same name exists, overwrite it
   const existing = presets.findIndex(p => p.name === entry.name);
   if (existing >= 0) {
     if (!confirm(`已有叫「${entry.name}」的規格,要覆蓋嗎?`)) return;
@@ -736,7 +958,6 @@ $("presetSave").addEventListener("click", () => {
   }
   savePresets(presets);
   refreshPresetDropdown();
-  // Select the saved one
   const newIdx = presets.findIndex(p => p.name === entry.name);
   $("presetSelect").value = String(newIdx);
 });
@@ -769,7 +990,6 @@ $("genGearBtn").addEventListener("click", () => {
   const z = parseInt($("gmTeeth").value, 10) || 30;
   const angle = parseFloat($("gmAngle").value) || 20;
   const hole = parseFloat($("gmHole").value) || 6;
-  // Hessmer uses circularPitch = M × π
   const circularPitch = (m * Math.PI).toFixed(4);
   const params = new URLSearchParams({
     circularPitch,
