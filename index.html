@@ -234,15 +234,20 @@
       <div class="hint" id="fileName">尚未選擇檔案</div>
     </div>
 
-    <!-- 2. Center -->
+    <!-- 2. Center & cleanup -->
     <div class="section">
-      <h2>2. 齒輪中心</h2>
+      <h2>2. 齒輪中心 & 清理</h2>
       <label class="inline">
         <input type="checkbox" id="autoCenter" checked />
         自動偵測中心點
       </label>
       <div class="hint">取消後,點「加工後」圖上任何位置可手動放置中心</div>
       <div class="hint" id="centerInfo" style="color:var(--blue);">未載入檔案</div>
+      <label class="inline" style="margin-top:8px;">
+        <input type="checkbox" id="stripRefs" checked />
+        去除藍色參考線(齒頂圓 / 齒根圓)
+      </label>
+      <div class="hint">齒輪網站產出的 SVG 常附帶藍色的參考圓,通常不需要</div>
     </div>
 
     <!-- 3. Saved presets -->
@@ -417,6 +422,10 @@ function buildProcessedDoc() {
   const doc = parser.parseFromString(originalSvgText, "image/svg+xml");
   const root = doc.documentElement;
 
+  // Optional cleanup: remove blue reference circles (pitch / addendum / root
+  // circles) that svg.js-based gear generators include as construction guides.
+  if ($("stripRefs").checked) stripReferenceLines(root);
+
   // Wrap existing children in <g id="Gear">
   // We wrap ALL direct children of root, including <defs> and <desc>,
   // which is fine for rendering. (They keep working inside a <g>.)
@@ -512,6 +521,27 @@ function buildLabelLayer(doc) {
   return layer;
 }
 
+// Remove elements with stroke="blue" (construction/reference geometry).
+// Only inspects attribute-based stroke — inline style="stroke:blue" also handled.
+function stripReferenceLines(svgRoot) {
+  const removed = [];
+  // Attribute-based stroke="blue"
+  svgRoot.querySelectorAll('[stroke="blue"]').forEach(el => {
+    el.remove();
+    removed.push(el);
+  });
+  // style="stroke: blue" inline style variant
+  svgRoot.querySelectorAll('[style]').forEach(el => {
+    const s = (el.getAttribute("style") || "").replace(/\s+/g, "");
+    if (/stroke:blue/i.test(s) || /stroke:#00f/i.test(s) || /stroke:#0000ff/i.test(s)) {
+      el.remove();
+      removed.push(el);
+    }
+  });
+  return removed.length;
+}
+
+// Add liveInputs binding
 // Suggest stroke width proportional to SVG size
 function getSuggestedStrokeWidth() {
   const svg = origBox.querySelector("svg");
@@ -616,7 +646,8 @@ $("autoCenter").addEventListener("change", () => {
 // ========== Control bindings ==========
 const liveInputs = [
   "centerDia", "mountDia", "mountOffset", "mountOn", "mount8",
-  "labelOn", "labelText", "labelColor", "labelSize", "labelOffset"
+  "labelOn", "labelText", "labelColor", "labelSize", "labelOffset",
+  "stripRefs"
 ];
 liveInputs.forEach(id => {
   const el = $(id);
