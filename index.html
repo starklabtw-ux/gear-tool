@@ -226,6 +226,21 @@
   </div>
 
   <div class="controls">
+    <!-- 0. Gear generator shortcut (optional) -->
+    <div class="section">
+      <h2>📐 產生齒輪初稿(Hessmer)</h2>
+      <div class="row">
+        <label>模數 M<input type="number" id="gmModule" value="1.5" step="0.1" min="0.1" /></label>
+        <label>齒數 Z<input type="number" id="gmTeeth" value="30" step="1" min="4" /></label>
+      </div>
+      <div class="row">
+        <label>壓力角<input type="number" id="gmAngle" value="20" step="0.5" /></label>
+        <label>中心孔 Ø<input type="number" id="gmHole" value="6" step="0.1" min="0.1" /></label>
+      </div>
+      <button class="btn" id="genGearBtn" style="margin-top:6px;">🔗 在 Hessmer 開啟(填好參數)</button>
+      <div class="hint">開啟後按 Hessmer 網頁的「Export SVG」下載,檔案會在 Downloads 資料夾。再拖回下方步驟 1 加工</div>
+    </div>
+
     <!-- 1. Upload -->
     <div class="section">
       <h2>1. 上傳 SVG</h2>
@@ -746,6 +761,30 @@ $("labelAuto").addEventListener("change", () => {
     autoFillLabel(originalFileName);
     renderProcessed();
   }
+});
+
+// ========== Gear generator shortcut (Hessmer) ==========
+$("genGearBtn").addEventListener("click", () => {
+  const m = parseFloat($("gmModule").value) || 1;
+  const z = parseInt($("gmTeeth").value, 10) || 30;
+  const angle = parseFloat($("gmAngle").value) || 20;
+  const hole = parseFloat($("gmHole").value) || 6;
+  // Hessmer uses circularPitch = M × π
+  const circularPitch = (m * Math.PI).toFixed(4);
+  const params = new URLSearchParams({
+    circularPitch,
+    pressureAngle: String(angle),
+    clearance: "0.05",
+    backlash: "0.05",
+    profileShift: "0",
+    gear1ToothCount: String(z),
+    gear1CenterHoleDiamater: String(hole),
+    gear2ToothCount: "10",
+    gear2CenterHoleDiamater: String(hole),
+    showOption: "3"
+  });
+  const url = "https://hessmer.org/gears/InvoluteSpurGearBuilder.html?" + params.toString();
+  window.open(url, "_blank", "noopener");
 });
 
 // ========== Download ==========
