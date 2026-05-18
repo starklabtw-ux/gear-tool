@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>齒輪軸承孔工具</title>
+<title>Gear Bearing Hole Tool</title>
 <style>
   :root {
     --bg: #f5f5f7;
@@ -423,30 +423,31 @@
 </head>
 <body>
 <header>
-  <h1>🦾 齒輪軸承孔工具</h1>
-  <span class="sub">產生齒輪 · 加孔 · 下載分好圖層的 SVG</span>
+  <h1>🦾 Gear Bearing Hole Tool</h1>
+  <span class="sub">Generate gear · Add holes · Download layered SVG</span>
 </header>
 <main>
   <!-- ===== LEFT: Previews ===== -->
   <div class="previews">
     <div class="panel" id="panelOrig">
       <div class="panel-title">
-        <span>原始</span>
+        <span>Original</span>
         <span class="badge">Before</span>
       </div>
       <div class="panel-body">
         <div class="svg-box" id="origBox"></div>
-        <div class="empty-msg" id="origEmpty">拖放 SVG 到任一預覽區\A或使用右側「上傳既有」</div>
+        <div class="empty-msg" id="origEmpty">Drop SVG into either preview panel
+or use [Upload] tab on the right</div>
       </div>
     </div>
     <div class="panel" id="panelOut">
       <div class="panel-title">
-        <span>加工後</span>
+        <span>Processed</span>
         <span class="badge out">After</span>
       </div>
       <div class="panel-body" id="outBody">
         <div class="svg-box" id="outBox"></div>
-        <div class="empty-msg" id="outEmpty">載入檔案後顯示加工結果</div>
+        <div class="empty-msg" id="outEmpty">Processed result will appear here</div>
       </div>
     </div>
   </div>
@@ -457,62 +458,62 @@
 
       <!-- TABS: input source -->
       <div class="tabs" role="tablist">
-        <button class="tab active" data-tab="gen" type="button">⚙️ Hessmer 產生</button>
-        <button class="tab" data-tab="upload" type="button">📁 上傳既有</button>
+        <button class="tab active" data-tab="gen" type="button">⚙️ Generate (Hessmer)</button>
+        <button class="tab" data-tab="upload" type="button">📁 Upload existing</button>
       </div>
 
       <!-- TAB: Generate -->
       <div class="tab-panel active" id="tab-gen">
         <div class="row cols-2">
           <div class="field">
-            <label for="gmModule">模數 M</label>
+            <label for="gmModule">Module M</label>
             <input type="number" id="gmModule" value="1.5" step="0.1" min="0.1" />
           </div>
           <div class="field">
-            <label for="gmTeeth">齒數 Z</label>
+            <label for="gmTeeth">Teeth Z</label>
             <input type="number" id="gmTeeth" value="30" step="1" min="4" />
           </div>
         </div>
         <div class="row cols-2">
           <div class="field">
-            <label for="gmAngle">壓力角</label>
+            <label for="gmAngle">Pressure angle</label>
             <input type="number" id="gmAngle" value="20" step="0.5" />
           </div>
           <div class="field">
-            <label for="gmHole">中心孔 Ø</label>
+            <label for="gmHole">Center hole Ø</label>
             <input type="number" id="gmHole" value="6" step="0.1" min="0.1" />
           </div>
         </div>
-        <button class="btn" id="genGearBtn" type="button">🔗 在 Hessmer 開新分頁</button>
-        <p class="hint">產生後按網頁的 <code>Export SVG</code> 下載,再拖回任一預覽區</p>
+        <button class="btn" id="genGearBtn" type="button">🔗 Open in Hessmer</button>
+        <p class="hint">After generating, click <code>Export SVG</code> in Hessmer, then drag the file back into either preview panel</p>
       </div>
 
       <!-- TAB: Upload -->
       <div class="tab-panel" id="tab-upload">
-        <label class="btn" for="fileInput">📁 選擇 SVG 檔案</label>
+        <label class="btn" for="fileInput">📁 Select SVG file</label>
         <input type="file" id="fileInput" accept=".svg,image/svg+xml" />
-        <div class="file-tag empty" id="fileName">尚未選擇檔案</div>
-        <p class="hint">也可以直接把 SVG 拖到左邊任一預覽區</p>
+        <div class="file-tag empty" id="fileName">No file selected</div>
+        <p class="hint">You can also drag SVG directly into either preview panel on the left</p>
       </div>
 
       <!-- ===== GROUP: Holes ===== -->
       <section class="group">
-        <h2>🔩 孔設定</h2>
+        <h2>🔩 Holes</h2>
 
         <!-- Preset management inline -->
         <div class="preset-row">
-          <select id="presetSelect" title="載入已存規格">
-            <option value="">— 選擇已存規格 —</option>
+          <select id="presetSelect" title="Load saved preset">
+            <option value="">— Load saved preset —</option>
           </select>
-          <button class="btn btn-icon" id="presetSave" type="button" title="存成新的常用規格">💾</button>
-          <button class="btn btn-icon" id="presetDelete" type="button" title="刪除選取規格">🗑</button>
+          <button class="btn btn-icon" id="presetSave" type="button" title="Save current as preset">💾</button>
+          <button class="btn btn-icon" id="presetDelete" type="button" title="Delete selected preset">🗑</button>
         </div>
 
         <!-- Center hole -->
         <div class="sub">
-          <div class="sub-title">⚫ 中心孔(軸心)</div>
+          <div class="sub-title">⚫ Center hole (shaft)</div>
           <div class="field">
-            <label for="centerDia">直徑 Ø (mm)</label>
+            <label for="centerDia">Diameter Ø (mm)</label>
             <input type="number" id="centerDia" value="5" step="0.1" min="0.1" />
           </div>
         </div>
@@ -522,52 +523,52 @@
           <div class="sub-title">
             <label class="inline">
               <input type="checkbox" id="mountOn" checked />
-              ⊕ 固定孔(十字 4 孔)
+              ⊕ Mounting holes (4 in cross)
             </label>
           </div>
           <div class="row cols-2">
             <div class="field">
-              <label for="mountDia">直徑 Ø (mm)</label>
+              <label for="mountDia">Diameter Ø (mm)</label>
               <input type="number" id="mountDia" value="3" step="0.1" min="0.1" />
             </div>
             <div class="field">
-              <label for="mountOffset">距中心 (mm)</label>
+              <label for="mountOffset">Offset from center (mm)</label>
               <input type="number" id="mountOffset" value="5" step="0.1" min="0.1" />
             </div>
           </div>
           <label class="inline" style="margin-top:4px;">
             <input type="checkbox" id="mount8" />
-            改成 8 孔(加對角)
+            Use 8 holes (add diagonals)
           </label>
         </div>
       </section>
 
       <!-- ===== GROUP: Label ===== -->
       <section class="group">
-        <h2>🏷️ 標籤
+        <h2>🏷️ Label
           <label class="inline group-hint">
-            <input type="checkbox" id="labelOn" checked /> 啟用
+            <input type="checkbox" id="labelOn" checked /> Enabled
           </label>
         </h2>
         <div class="field">
-          <label for="labelText">文字內容</label>
+          <label for="labelText">Text</label>
           <input type="text" id="labelText" value="M130" />
         </div>
         <label class="inline" style="margin-bottom:10px;">
           <input type="checkbox" id="labelAuto" checked />
-          從檔名自動抓(如 <code>...mi130</code> → <code>M130</code>)
+          Auto-extract from filename (e.g. <code>...mi130</code> → <code>M130</code>)
         </label>
         <div class="row cols-3">
           <div class="field">
-            <label>顏色</label>
+            <label>Color</label>
             <input type="color" id="labelColor" value="#e63946" />
           </div>
           <div class="field">
-            <label for="labelSize">字大小</label>
+            <label for="labelSize">Font size</label>
             <input type="number" id="labelSize" value="8" step="0.5" min="1" />
           </div>
           <div class="field">
-            <label for="labelOffset">上偏移 (mm)</label>
+            <label for="labelOffset">Y-offset (mm)</label>
             <input type="number" id="labelOffset" value="-14" step="0.5" />
           </div>
         </div>
@@ -575,26 +576,26 @@
 
       <!-- ===== GROUP: Advanced (collapsible) ===== -->
       <details class="group">
-        <summary>⚙️ 進階</summary>
+        <summary>⚙️ Advanced</summary>
         <label class="inline" style="margin-bottom:4px;">
           <input type="checkbox" id="autoCenter" checked />
-          自動偵測齒輪中心
+          Auto-detect gear center
         </label>
-        <p class="hint">取消後,點「加工後」預覽圖可手動放置中心</p>
-        <p class="hint status" id="centerInfo">未載入檔案</p>
+        <p class="hint">Uncheck to click in the [Processed] preview to place center manually</p>
+        <p class="hint status" id="centerInfo">No file loaded</p>
 
         <label class="inline" style="margin-top:10px;">
           <input type="checkbox" id="stripRefs" checked />
-          去除藍色參考線(齒頂圓 / 齒根圓)
+          Strip blue reference circles (pitch / root)
         </label>
-        <p class="hint">Hessmer 等齒輪網站產出的 SVG 常附帶參考圓</p>
+        <p class="hint">Hessmer and similar gear tools include reference circles by default</p>
       </details>
 
     </div>
 
     <!-- ===== Fixed footer: download ===== -->
     <div class="controls-footer">
-      <button class="btn btn-primary" id="downloadBtn" disabled type="button">📥 下載加工 SVG</button>
+      <button class="btn btn-primary" id="downloadBtn" disabled type="button">📥 Download SVG</button>
       <div class="layer-chips">
         <code>Gear</code>
         <code>Bearing Hole</code>
@@ -693,7 +694,7 @@ function renderOriginal() {
   const parser = new DOMParser();
   const doc = parser.parseFromString(originalSvgText, "image/svg+xml");
   if (doc.querySelector("parsererror")) {
-    alert("SVG 解析失敗,檔案可能損毀");
+    alert("Failed to parse SVG. The file may be corrupted.");
     return;
   }
   const svgEl = doc.documentElement;
@@ -860,12 +861,12 @@ function autoDetectCenter() {
     const p = localToUserSpace(best, svg, cx, cy);
     center.x = p.x;
     center.y = p.y;
-    centerInfo.textContent = `偵測到中心:r=${bestR.toFixed(2)} @ (${center.x.toFixed(2)}, ${center.y.toFixed(2)})`;
+    centerInfo.textContent = `Center detected: r=${bestR.toFixed(2)} @ (${center.x.toFixed(2)}, ${center.y.toFixed(2)})`;
   } else {
     const vb = (svg.getAttribute("viewBox") || "0 0 100 100").split(/\s+/).map(parseFloat);
     center.x = vb[0] + vb[2] / 2;
     center.y = vb[1] + vb[3] / 2;
-    centerInfo.textContent = `未找到圓,使用 viewBox 中心`;
+    centerInfo.textContent = `No circle found; using viewBox center`;
   }
 }
 
@@ -901,7 +902,7 @@ outBody.addEventListener("click", e => {
   const p = pt.matrixTransform(ctm.inverse());
   center.x = p.x;
   center.y = p.y;
-  centerInfo.textContent = `手動設定:(${center.x.toFixed(2)}, ${center.y.toFixed(2)})`;
+  centerInfo.textContent = `Manual: (${center.x.toFixed(2)}, ${center.y.toFixed(2)})`;
   renderProcessed();
 });
 
@@ -938,8 +939,8 @@ function refreshPresetDropdown() {
   const sel = $("presetSelect");
   const presets = loadPresets();
   const prev = sel.value;
-  sel.innerHTML = '<option value="">— 選擇已存規格 —</option>' +
-    presets.map((p, i) => `<option value="${i}">${escapeHtml(p.name)} · 中心Ø${p.centerDia} / 固定Ø${p.mountDia}@${p.mountOffset}mm</option>`).join("");
+  sel.innerHTML = '<option value="">— Load saved preset —</option>' +
+    presets.map((p, i) => `<option value="${i}">${escapeHtml(p.name)} · Center Ø${p.centerDia} / Mount Ø${p.mountDia}@${p.mountOffset}mm</option>`).join("");
   if (prev && sel.querySelector(`option[value="${prev}"]`)) sel.value = prev;
 }
 function escapeHtml(s) {
@@ -972,14 +973,14 @@ $("presetSelect").addEventListener("change", e => {
 });
 
 $("presetSave").addEventListener("click", () => {
-  const defaultName = `Ø${$("centerDia").value} / 固定Ø${$("mountDia").value}`;
-  const name = prompt("幫這組規格取個名字(例:「小齒輪 Ø5」):", defaultName);
+  const defaultName = `Ø${$("centerDia").value} / Mount Ø${$("mountDia").value}`;
+  const name = prompt('Name this preset (e.g. "Small gear Ø5"):', defaultName);
   if (!name || !name.trim()) return;
   const presets = loadPresets();
   const entry = { name: name.trim(), ...currentSettingsSnapshot() };
   const existing = presets.findIndex(p => p.name === entry.name);
   if (existing >= 0) {
-    if (!confirm(`已有叫「${entry.name}」的規格,要覆蓋嗎?`)) return;
+    if (!confirm(`A preset named "${entry.name}" already exists. Overwrite?`)) return;
     presets[existing] = entry;
   } else {
     presets.push(entry);
@@ -994,10 +995,10 @@ $("presetDelete").addEventListener("click", () => {
   const idx = parseInt($("presetSelect").value, 10);
   const presets = loadPresets();
   if (isNaN(idx) || !presets[idx]) {
-    alert("先在下拉選單選一個規格再刪除");
+    alert("Select a preset from the dropdown first.");
     return;
   }
-  if (!confirm(`確定刪除「${presets[idx].name}」?`)) return;
+  if (!confirm(`Delete "${presets[idx].name}"?`)) return;
   presets.splice(idx, 1);
   savePresets(presets);
   refreshPresetDropdown();
